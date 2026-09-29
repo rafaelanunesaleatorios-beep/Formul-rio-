@@ -1,25 +1,37 @@
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
-import { Streamdown } from 'streamdown';
+import { FormEvent, useState } from "react";
+import { Link } from "wouter";
+import { ArrowRight, Check, ChevronDown, CircleHelp, Clock3, LockKeyhole, ShieldCheck, Sparkles, UserRoundCheck } from "lucide-react";
+import { trpc } from "@/lib/trpc";
 
-/**
- * All content in this page are only for example, replace with your own feature implementation
- * When building pages, remember your instructions in Frontend Workflow, Frontend Best Practices, Design Guide and Common Pitfalls
- */
-export default function Home() {
-  // If theme is switchable in App.tsx, we can implement theme toggling like this:
-  // const { theme, toggleTheme } = useTheme();
+const initialForm = { discordId: "", discordTag: "", ageRange: "", timezone: "", experience: "", availability: "", motivation: "", trust: "", scenario: "", references: "", extra: "" };
+type FormState = typeof initialForm;
 
-  return (
-    <div className="min-h-screen flex flex-col">
-      <main>
-        {/* Example: lucide-react for icons */}
-        <Loader2 className="animate-spin" />
-        Example Page
-        {/* Example: Streamdown for markdown rendering */}
-        <Streamdown>Any **markdown** content</Streamdown>
-        <Button variant="default">Example Button</Button>
-      </main>
-    </div>
-  );
+function SectionEyebrow({ children }: { children: React.ReactNode }) { return <p className="eyebrow">{children}</p>; }
+
+function Home() {
+  const [form, setForm] = useState<FormState>(initialForm);
+  const [sentProtocol, setSentProtocol] = useState<string | null>(null);
+  const submitApplication = trpc.applications.submit.useMutation({ onSuccess: result => { setSentProtocol(result.protocol); setForm(initialForm); document.getElementById("application")?.scrollIntoView({ behavior: "smooth", block: "start" }); } });
+  const update = (key: keyof FormState, value: string) => setForm(current => ({ ...current, [key]: value }));
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => { event.preventDefault(); setSentProtocol(null); submitApplication.mutate(form); };
+
+  return <div className="site-shell">
+    <div className="top-strip"><span className="signal-dot" /> PROGRAMA MIDDLEMAN <span className="top-strip-muted">// inscrições abertas</span></div>
+    <header className="site-header container"><Link href="/" className="brand" aria-label="Millenium início"><img src="/millenium-mark.svg" alt="" className="brand-mark" /><span><strong>millenium</strong><small>MIDDLEMAN PROGRAM</small></span></Link><nav className="site-nav" aria-label="Navegação principal"><a href="#program">o programa</a><a href="#criteria">critérios</a><a href="#application" className="nav-cta">candidatar-se <ArrowRight size={15} /></a><Link href="/admin" className="admin-link"><LockKeyhole size={14} /> admin</Link></nav></header>
+    <main>
+      <section className="hero container" id="program"><div className="hero-copy"><div className="status-line"><span className="status-chip">MLN / 01</span><span>função de confiança</span></div><h1>Intermediar é<br /><span>cuidar do acordo.</span></h1><p className="hero-lede">O Middleman é a pessoa que mantém as negociações seguras, transparentes e justas dentro do <strong>millenium</strong>. Se você tem calma para resolver problemas e compromisso com a comunidade, queremos conhecer você.</p><div className="hero-actions"><a href="#application" className="button button-primary">Quero ser Middleman <ArrowRight size={17} /></a><a href="#criteria" className="text-link">entender a função <ChevronDown size={16} /></a></div><div className="trust-note"><ShieldCheck size={18} /><span>suas respostas são analisadas apenas pela equipe responsável</span></div></div><div className="hero-panel"><div className="panel-grid-lines" /><div className="panel-kicker">// status do programa</div><div className="panel-status"><span className="status-dot" /> recebendo candidaturas</div><div className="panel-number">03<span> pilares</span></div><div className="pillar-list"><div><span>01</span><p><strong>confiança</strong><small>agir com imparcialidade</small></p></div><div><span>02</span><p><strong>clareza</strong><small>registrar cada etapa</small></p></div><div><span>03</span><p><strong>presença</strong><small>estar disponível quando importa</small></p></div></div><div className="panel-footer">MILLENIUM / COMMUNITY SAFETY</div></div></section>
+      <section className="metrics-band"><div className="container metrics-grid"><div><span className="metric-number">01</span><p><strong>leia com atenção</strong><br />a função exige responsabilidade real</p></div><div><span className="metric-number">02</span><p><strong>responda com sinceridade</strong><br />não existe resposta decorada</p></div><div><span className="metric-number">03</span><p><strong>aguarde a análise</strong><br />a equipe retorna pelo Discord</p></div></div></section>
+      <section className="content-section container" id="criteria"><div className="section-heading"><div><SectionEyebrow>01 / o que esperamos</SectionEyebrow><h2>Ser referência<br /><em>quando complica.</em></h2></div><p>O Middleman não é apenas um cargo. É o compromisso de proteger a experiência de todos, especialmente nos momentos em que uma negociação sai do esperado.</p></div><div className="principles-grid"><article className="principle-card"><span>01</span><UserRoundCheck size={23} /><h3>Imparcialidade</h3><p>Você não escolhe lados. Você aplica o combinado, verifica os fatos e trata cada pessoa com o mesmo respeito.</p></article><article className="principle-card"><span>02</span><Clock3 size={23} /><h3>Disponibilidade</h3><p>Conflitos não têm horário marcado. Precisamos saber quando você consegue estar presente para ajudar.</p></article><article className="principle-card"><span>03</span><CircleHelp size={23} /><h3>Raciocínio</h3><p>Leia cenários, faça perguntas e busque uma solução segura antes de tomar qualquer decisão.</p></article></div></section>
+      <section className="form-section" id="application"><div className="container form-layout"><div className="form-intro"><SectionEyebrow>02 / sua candidatura</SectionEyebrow><h2>Mostre como<br /><em>você pensa.</em></h2><p>Reserve alguns minutos. As perguntas abaixo ajudam a equipe a entender seu perfil, sua experiência e como você lidaria com situações reais.</p><div className="form-aside"><Sparkles size={17} /><span>campos marcados com <b>*</b> são obrigatórios</span></div></div><form className="application-form" onSubmit={handleSubmit}>{sentProtocol && <div className="success-card"><div className="success-icon"><Check size={20} /></div><div><strong>Candidatura recebida.</strong><p>Seu protocolo é <b>{sentProtocol}</b>. Guarde esse código; a equipe do millenium responderá pelo Discord.</p></div></div>}{submitApplication.error && <div className="error-card">Não foi possível enviar agora. Revise os campos e tente novamente.</div>}
+        <div className="form-block"><div className="form-block-heading"><span>01</span><div><h3>Identificação</h3><p>Como encontramos você no Discord?</p></div></div><div className="field-grid two-cols"><label><span>ID do Discord <b>*</b></span><input value={form.discordId} onChange={event => update("discordId", event.target.value)} placeholder="ex.: 123456789012345678" required /></label><label><span>Usuário / tag <b>*</b></span><input value={form.discordTag} onChange={event => update("discordTag", event.target.value)} placeholder="ex.: @seu_usuario" required /></label></div></div>
+        <div className="form-block"><div className="form-block-heading"><span>02</span><div><h3>Contexto</h3><p>Um pouco sobre sua rotina e experiência.</p></div></div><div className="field-grid two-cols"><label><span>Faixa etária <b>*</b></span><select value={form.ageRange} onChange={event => update("ageRange", event.target.value)} required><option value="">selecione</option><option>Menos de 16</option><option>16 a 17</option><option>18 a 20</option><option>21 a 24</option><option>25 ou mais</option></select></label><label><span>Fuso / região <b>*</b></span><input value={form.timezone} onChange={event => update("timezone", event.target.value)} placeholder="ex.: BRT / Brasil" required /></label></div><label><span>Você já foi staff, moderador ou Middleman? Conte sua experiência. <b>*</b></span><textarea value={form.experience} onChange={event => update("experience", event.target.value)} placeholder="Fale sobre servidores, comunidades ou situações em que você já ajudou..." required minLength={20} /></label><label><span>Qual é sua disponibilidade semanal? <b>*</b></span><textarea value={form.availability} onChange={event => update("availability", event.target.value)} placeholder="Dias, horários e quanto tempo normalmente consegue acompanhar..." required minLength={10} /></label></div>
+        <div className="form-block"><div className="form-block-heading"><span>03</span><div><h3>Confiança</h3><p>O que traz você para essa responsabilidade?</p></div></div><label><span>Por que quer ser Middleman no millenium? <b>*</b></span><textarea value={form.motivation} onChange={event => update("motivation", event.target.value)} placeholder="Não procure a resposta perfeita. Explique o que você realmente espera contribuir..." required minLength={20} /></label><label><span>Por que a equipe deveria confiar em você? <b>*</b></span><textarea value={form.trust} onChange={event => update("trust", event.target.value)} placeholder="Fale sobre postura, ética, discrição e como você lida com responsabilidade..." required minLength={20} /></label></div>
+        <div className="form-block"><div className="form-block-heading"><span>04</span><div><h3>Situação prática</h3><p>Não existe roteiro — queremos entender seu raciocínio.</p></div></div><label><span>O que você faria caso duas pessoas discordassem sobre um acordo e ambas afirmassem ter razão? <b>*</b></span><textarea value={form.scenario} onChange={event => update("scenario", event.target.value)} placeholder="Descreva passo a passo: o que você verifica, como conversa e quando pede ajuda..." required minLength={20} /></label></div>
+        <div className="form-block"><div className="form-block-heading"><span>05</span><div><h3>Para fechar</h3><p>Informações opcionais que podem ajudar na análise.</p></div></div><label><span>Alguém da comunidade pode indicar você?</span><input value={form.references} onChange={event => update("references", event.target.value)} placeholder="nome ou ID, se houver" /></label><label><span>Existe algo mais que gostaria de contar?</span><textarea value={form.extra} onChange={event => update("extra", event.target.value)} placeholder="Qualquer contexto que você considere importante..." /></label></div>
+        <div className="form-submit-row"><p><ShieldCheck size={16} /> seus dados ficam restritos à análise da equipe</p><button type="submit" className="button button-primary" disabled={submitApplication.isPending}>{submitApplication.isPending ? "enviando..." : "enviar candidatura"}<ArrowRight size={17} /></button></div>
+      </form></div></section>
+    </main><footer className="site-footer container"><div className="brand footer-brand"><img src="/millenium-mark.svg" alt="" className="brand-mark" /><span><strong>millenium</strong><small>community safety system</small></span></div><p>feito para negociações mais seguras.</p><Link href="/admin" className="footer-admin"><LockKeyhole size={14} /> área restrita</Link></footer>
+  </div>;
 }
+
+export default Home;
