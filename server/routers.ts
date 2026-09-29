@@ -17,9 +17,9 @@ import { getDb } from "./db";
 const ADMIN_CODE = process.env.MILLENIUM_ADMIN_CODE || "99!-@Mulra";
 
 const defaultRoles = [
-  { id: 1, name: "Middleman Principal", description: "Coordena negociações de maior valor e garante que o protocolo seja seguido.", color: "green", active: 1 },
-  { id: 2, name: "Middleman de Suporte", description: "Acompanha trocas, orienta membros e escala situações sensíveis.", color: "blue", active: 1 },
-  { id: 3, name: "Middleman em Treinamento", description: "Aprende o fluxo com acompanhamento de um Middleman experiente.", color: "amber", active: 1 },
+  { id: 1, name: "Middleman-elite", description: "Coordena negociações de maior valor e garante que o protocolo seja seguido.", color: "green", active: 1 },
+  { id: 2, name: "veterano", description: "Acompanha trocas, orienta membros e escala situações sensíveis.", color: "blue", active: 1 },
+  { id: 3, name: "novato", description: "Aprende o fluxo com acompanhamento de um Middleman experiente.", color: "amber", active: 1 },
 ];
 
 const applicationInput = z.object({
