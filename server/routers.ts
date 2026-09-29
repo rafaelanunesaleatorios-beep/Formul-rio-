@@ -17,8 +17,8 @@ import { getDb } from "./db";
 const ADMIN_CODE = process.env.MILLENIUM_ADMIN_CODE || "99!-@Mulra";
 
 const defaultRoles = [
-  { id: 1, name: "Middleman-elite", description: "Nível máximo de confiança. Atua em negociações de maior valor, orienta a equipe e toma a frente em situações sensíveis.", color: "green", active: 1 },
-  { id: 2, name: "Middleman-veterano", description: "Nível alto de confiança. Já domina o protocolo, acompanha negociações importantes e pode orientar Middlemen em evolução.", color: "blue", active: 1 },
+  { id: 1, name: "Middleman-Elite", description: "Nível máximo de confiança. Atua em negociações de maior valor, orienta a equipe e toma a frente em situações sensíveis.", color: "green", active: 1 },
+  { id: 2, name: "Middleman-Veterano", description: "Nível alto de confiança. Já domina o protocolo, acompanha negociações importantes e pode orientar Middlemen em evolução.", color: "blue", active: 1 },
   { id: 3, name: "Middleman-Novato", description: "Primeiro nível de confiança. Atua em negociações sob orientação, aprende o protocolo e constrói seu histórico na equipe.", color: "amber", active: 1 },
 ];
 

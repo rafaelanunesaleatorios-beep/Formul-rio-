@@ -2,10 +2,11 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-:root { font-family: "Space Grotesk", ui-sans-serif, system-ui, sans-serif; color: #f1f5f3; background: #101820; font-synthesis: none; --green: #39ff88; --bg: #101820; --surface: #17232b; --surface-2: #1d2d34; --line: rgba(181, 214, 198, .16); --muted: #9db1aa; --amber: #e9bb58; --red: #f27d7d; }
+:root { font-family: "Space Grotesk", ui-sans-serif, system-ui, sans-serif; color: #f1f5f3; background: #101820; font-synthesis: none; --green: #ffffff; --bg: #000000; --surface: #111111; --surface-2: #1f1f1f; --line: rgba(255, 255, 255, .18); --muted: #bdbdbd; --amber: #ffffff; --red: #ffffff; }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { margin: 0; min-width: 320px; background: var(--bg); color: #f1f5f3; }
+body { margin: 0; min-width: 320px; background: #000; color: #fff; }
+#root { filter: grayscale(1) contrast(1.08); }
 button, input, select, textarea { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
 a { color: inherit; text-decoration: none; }
