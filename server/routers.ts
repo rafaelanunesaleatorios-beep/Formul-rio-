@@ -14,7 +14,7 @@ import { TRPCError } from "@trpc/server";
 import { desc } from "drizzle-orm";
 import { getDb } from "./db";
 
-const ADMIN_CODE = "99!-@Mulra";
+const ADMIN_CODE = process.env.MILLENIUM_ADMIN_CODE || "99!-@Mulra";
 
 const defaultRoles = [
   { id: 1, name: "Middleman-Elite", description: "Nível máximo de confiança. Atua em negociações de maior valor, orienta a equipe e toma a frente em situações sensíveis.", color: "green", active: 1 },
