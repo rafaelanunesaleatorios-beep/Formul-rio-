@@ -14,7 +14,11 @@ import { TRPCError } from "@trpc/server";
 import { desc } from "drizzle-orm";
 import { getDb } from "./db";
 
-const ADMIN_CODE = process.env.MILLENIUM_ADMIN_CODE || "99!-@Mulra";
+const DEFAULT_ADMIN_CODE = "99!-@Mulra";
+const CONFIGURED_ADMIN_CODE = (process.env.MILLENIUM_ADMIN_CODE ?? "")
+  .trim()
+  .replace(/^("|')(.*)\1$/, "$2")
+  .trim();
 
 const defaultRoles = [
   { id: 1, name: "Middleman-Elite", description: "Nível máximo de confiança. Atua em negociações de maior valor, orienta a equipe e toma a frente em situações sensíveis.", color: "green", active: 1 },
@@ -42,7 +46,10 @@ const memoryApplications: Array<z.infer<typeof applicationInput> & { id: number;
 let nextMemoryId = 1;
 
 function ensureAdmin(code: string) {
-  if (code !== ADMIN_CODE) {
+  const normalizedCode = code.trim();
+  const isValid = normalizedCode === DEFAULT_ADMIN_CODE ||
+    (CONFIGURED_ADMIN_CODE.length > 0 && normalizedCode === CONFIGURED_ADMIN_CODE);
+  if (!isValid) {
     throw new TRPCError({ code: "FORBIDDEN", message: "Código de administração inválido." });
   }
 }
